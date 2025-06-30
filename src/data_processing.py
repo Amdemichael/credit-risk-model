@@ -19,7 +19,7 @@ from pathlib import Path
 
 @dataclass
 class DataPaths:
-    raw: str = '../data/data.csv'
+    raw: str = '../data/raw/data.csv'
     processed: str = '../data/processed/features.csv'
     feature_mapping: str = '../data/processed/feature_mapping.txt'
 
@@ -168,6 +168,7 @@ def create_feature_pipeline() -> Pipeline:
     time_features = ['hour_sin', 'hour_cos', 'weekday_sin']
     behavioral_features = ['days_since_last', 'value_zscore', 'category_change_count']
     
+    # Create transformers with feature names support
     numeric_transformer = Pipeline([
         ('scaler', StandardScaler())
     ])
@@ -176,11 +177,13 @@ def create_feature_pipeline() -> Pipeline:
         ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
     ])
     
+    # Modified preprocessor to preserve customerid
     preprocessor = ColumnTransformer([
         ('num', numeric_transformer, numerical_features),
         ('cat', categorical_transformer, categorical_features),
         ('time', 'passthrough', time_features),
-        ('behavioral', 'passthrough', behavioral_features)
+        ('behavioral', 'passthrough', behavioral_features),
+        ('id', 'passthrough', ['customerid'])  # Explicitly pass through customerid
     ])
     
     return Pipeline([
