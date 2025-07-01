@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  mlflow:
+    build:
+      context: .
+      dockerfile: Dockerfile  # Make sure this points to your Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlruns
+    environment:
+      - MLFLOW_DB_MIGRATION_ENABLED=false
+    command: >
+      bash -c "pip install mlflow==2.12.1 &&
+      mlflow server
+      --backend-store-uri sqlite:////mlruns/mlflow.db
+      --default-artifact-root file:///mlruns
+      --host 0.0.0.0"
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      mlflow:
+        condition: service_started
+    volumes:
+      - ./mlruns:/app/mlruns

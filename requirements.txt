@@ -1,18 +1,37 @@
-# Data processing
-numpy>=2.0.0
+# Core Data Processing
+numpy>=2.0.0  # Compatible with MLflow 2.10+
 pandas>=2.0.0
 scikit-learn>=1.4.0
 
 # Visualization
 matplotlib>=3.8.0
-seaborn
+seaborn>=0.13.0
 
-# ML Tracking
-mlflow>=2.10.0
+# ML Tracking (updated for Python 3.13)
+mlflow>=2.10.0,<3.0.0  # Version range that works with NumPy 2.x
+
+
+# API Framework
+fastapi>=0.109.0
+uvicorn>=0.27.0
+python-multipart>=0.0.6
+pydantic>=2.6.0
+
+# Database/Storage
+sqlalchemy>=2.0.25
+pymysql>=1.1.0
+psycopg2-binary>=2.9.9
 
 # Testing
 pytest>=8.0.0
+httpx>=0.26.0
+pytest-cov>=4.1.0
 
-# Additional critical dependencies
+# Production
+gunicorn>=21.2.0
+greenlet>=3.0.0
+
+# Build Tools
 setuptools>=65.0.0
 wheel>=0.40.0
+
